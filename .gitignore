@@ -1,4 +1,9 @@
 /site/example.js
+/out
+out
+.repl
+/.repl
+_site
 /_site
 /target
 /classes
