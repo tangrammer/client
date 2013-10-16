@@ -4,8 +4,8 @@
 out
 .repl
 /.repl
-_site
-/_site
+/site/_site
+site/_site
 /target
 /classes
 /checkouts
