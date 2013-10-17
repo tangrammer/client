@@ -38,7 +38,8 @@ I'm using in this project jekyll as webserver so you'll need ruby >= 1.8
 
 
 ## TODO: 
-Currently austin/the_app can use the core.async macros 
+Currently austin/the_app can use the core.async macros without more configuration, previously with piggieback you have to evaluate the macros into the nrepl session before starting the cljsrepl.. 
+It would be good to test a owner app macro, maybe it works fine also
 
 
 ## License
