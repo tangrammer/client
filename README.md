@@ -6,6 +6,9 @@ That's to say once you follow the steps to link your brepl to your nrepl, then y
 
 [VIDEO](https://vimeo.com/77124644) 
 
+Currently austin/the_app can use clojure macros without more configuration, previously with piggieback you have to evaluate the macros into the nrepl session before starting the cljs-repl.
+
+
 ## Requirements
 I'm using in this project jekyll as webserver so you'll need ruby >= 1.8 
 
@@ -37,9 +40,8 @@ I'm using in this project jekyll as webserver so you'll need ruby >= 1.8
 * [austin](https://github.com/cemerick/austin)
 
 
-## TODO: 
-Currently austin/the_app can use the core.async macros without more configuration, previously with piggieback you have to evaluate the macros into the nrepl session before starting the cljsrepl.. 
-It would be good to test a owner app macro, maybe it works fine also
+## TODO:  
+* 
 
 
 ## License

@@ -5,9 +5,13 @@
     :refer [<! >! >!!  chan close! sliding-buffer put! alts!]]
 
    )
-  (:require-macros [cljs.core.async.macros :as m :refer [go]])
+  (:require-macros [cljs.core.async.macros :as m :refer [go]]
+                   [client.mymacro :as mm :refer [eq1]])
 
   )
+
+(defn using-macros []
+  (appendea (eq1 1 1)))
 
 (def c1 (chan))
 (go (while true
