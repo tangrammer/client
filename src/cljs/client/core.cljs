@@ -1,6 +1,6 @@
 (ns client.core
   (:require
-   [jayq.core :refer [$ css append ajax inner $deferred when done resolve pipe on] :as jq]
+   [jayq.core :refer [$ css prepend append ajax inner $deferred when done resolve pipe on] :as jq]
    [cljs.core.async :as async
     :refer [<! >! >!!  chan close! sliding-buffer put! alts!]]
 
@@ -12,7 +12,7 @@
 (def c1 (chan))
 (go (while true
         (let [v (<! c1)]
-          (appendea (str "Read" v )))))
+          (appendea v))))
 (defn get-body [] ($ :body))
 
 (defn greeny [] (-> (get-body)
@@ -22,7 +22,7 @@
   (-> (get-body) (css {:background color})))
 
 (defn appendea [message]
-  (-> (get-body) (append message))
+  (-> (get-body) (prepend (str message "<br>")))
   )
 
 (defn  foo
@@ -31,3 +31,6 @@
   (str  x "Hello, World!"))
 
 (defn log []  (.log js/console (foo "juanito")))
+
+(defn write [mes]
+  (go (>! c1 mes)))
