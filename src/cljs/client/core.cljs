@@ -1,5 +1,12 @@
 (ns client.core
- (:use [jayq.core :only [$ css html append]]) 
+  (:require
+   [jayq.core :refer [$ css append ajax inner $deferred when done resolve pipe on] :as jq]
+   [cljs.core.async :as async
+    :refer [<! >! chan close! sliding-buffer put! alts!]]
+
+   )
+  (:require-macros [cljs.core.async.macros :as m :refer [go]])
+
   )
 (defn get-body [] ($ :body))
 

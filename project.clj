@@ -5,7 +5,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :repositories {"sonatype-staging"
                  "https://oss.sonatype.org/content/groups/staging/"}
-  :source-paths ["src"]
+  :source-paths ["src/clj" "src/cljs"]
 
   :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl] }
 
@@ -14,7 +14,7 @@
                  [org.clojure/clojure "1.5.1"]
                  [org.clojure/clojurescript "0.0-1847"]
                  [jayq "2.4.0"]
-
+                 [org.clojure/core.async "0.1.0-SNAPSHOT"]
                  ]
 
   
@@ -23,7 +23,7 @@
                    :plugins [[com.cemerick/austin "0.1.0"]
                              [lein-cljsbuild "0.3.2"]]
                    :cljsbuild {:builds [{:id "base"
-                                         :source-paths ["src"
+                                         :source-paths ["src/cljs"
                                                         ]
                                          :compiler {:optimizations :whitespace
                                                     :externs ["site/externs/jquery.min.js"]
