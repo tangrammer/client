@@ -9,6 +9,33 @@
                    [client.mymacro :as mm :refer [eq1 eqq1]])
 
   )
+
+(comment
+  <script>
+
+var oHead = document.getElementsByTagName('HEAD').item(0);
+
+var oScript= document.createElement("script");
+
+oScript.type = "text/javascript";
+
+oScript.src="other.js";
+
+oHead.appendChild( oScript);
+
+</script>
+)
+(defn add-script-to-head []
+  (let [the-head js/document.head
+        the-script (.createElement js/document "script")
+        the-script-value "console.log(\"The script was run\");"
+        ]
+                                        ;(set! (.-type the-script) "text/javascript")
+                                        ;(set! (.-src the-script) "url_file")
+    (set! (.-innerHTML the-script) the-script-value)  
+    (.appendChild the-head the-script)
+    ))
+
 (defn data-from-event [event]
   (-> event .-currentTarget $ position))
 
