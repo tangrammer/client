@@ -33,6 +33,7 @@
 (defn draw-event-capture [in-chan selector]
   (let [end-handler (fn [_] (put! in-chan [:drawend]) )]
     (nice-mouse-event-capture in-chan selector end-handler)
+    in-chan
 ))
 
 (defn get-drawing [input-chan out-chan]
@@ -42,11 +43,10 @@
         (when (= (first msg) :draw)
           (recur (<! input-chan))))))
 
-(defn draw-chan [selector]
-  (let [input-chan (chan)
+(defn filter-drawing-events [input-chan selector]
+  (let [
         out-chan   (chan)
         ]
-    (draw-event-capture    input-chan selector)
     (go (loop [[msg-name msg-data :as msg] (<! input-chan)]
         ;(.log js/console (str "...... draw-chan: " msg-name))          
           (when (= msg-name :draw)
@@ -76,7 +76,7 @@
            (.log js/console "out of range!"))
          (recur (<! drawing-chan)))))))
 
-(defn drawing-loop [selector]
+(comment defn drawing-loop [selector]
   (let [drawing-chan (draw-chan selector)]
     (go
      (loop [[msg-name msg-data] (<! drawing-chan)

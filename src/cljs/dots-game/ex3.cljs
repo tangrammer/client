@@ -7,7 +7,7 @@
                       offset] :as jq]
    [jayq.util :refer [log]]
    [crate.core :as crate]
-   [dots-game.ex1 :refer [draw-chan]]
+   [dots-game.ex1 :refer [filter-drawing-events draw-event-capture]]
    [dots-game.ex2 :refer [render-example-board grid-unit board-size] :as board])
   (:require-macros [cljs.core.async.macros :as m :refer [go]]))
 
@@ -40,40 +40,22 @@
          (recur (or cur-pos last-pos) (<! draw-channel)))))))
 
 
-(defn check-dot-channel [draw-channel board-offset]
-(let [ out-chan (chan)]
-    
+(defn check-dot [draw-channel board-offset]
+  (let [ out-chan (chan)]
     (go
-    (loop [msg (<! draw-channel)]
-      (when (= (first msg) :draw)
-        (<! (collect-dots draw-channel out-chan board-offset msg))
-        (-log msg)
-        (put! out-chan [:end-dots]))
-      (recur (<! draw-channel))))
+     (loop [msg (<! draw-channel)]
+       (when (= (first msg) :draw)
+         (<! (collect-dots draw-channel out-chan board-offset msg))
+         (-log msg)
+         (put! out-chan [:end-dots]))
+       (recur (<! draw-channel))))
     out-chan
     )
-
-  
-  
   )
 
 
 
-
-
-(defn dot-chan [selector]
-  (let [
-        board-offset ((juxt :left :top) (offset ($ selector)))
-        res (-> selector (draw-chan) (check-dot-channel  board-offset))
-        ]
-    (-log res)
-    res
-
-    ))
-
-
-(defn log-process [selector the-chan]
-  (-log "eyyyyyy")
+(defn log-process [the-chan selector]
   (go
    (loop [the-value (<! the-chan)]
      (-log "the-value")
@@ -86,10 +68,16 @@
 
 
 (defn log-loop [selector]
-  (let [check-dot-channel (dot-chan selector)]
-    (log-process selector check-dot-channel)
+  (let [
+        board-offset ((juxt :left :top) (offset ($ selector)))
+        ]
+    (-> (chan)
+     (draw-event-capture selector)   
+     (filter-drawing-events selector)
+     (check-dot board-offset)
+     (log-process selector)
+     )
     (render-example-board selector)
-
     ))
 
 
