@@ -37,7 +37,7 @@
 
 (defn get-drawing [input-chan out-chan]
   (go (loop [msg (<! input-chan)]
-        (.log js/console msg)
+        ;(.log js/console (str "get-drawing: " (first msg)))
         (put! out-chan msg)
         (when (= (first msg) :draw)
           (recur (<! input-chan))))))
@@ -45,12 +45,14 @@
 (defn draw-chan [selector]
   (let [input-chan (chan)
         out-chan   (chan)
-        start-message :draw]
+        ]
     (draw-event-capture    input-chan selector)
     (go (loop [[msg-name msg-data :as msg] (<! input-chan)]
-          (when (= msg-name start-message)
+        ;(.log js/console (str "...... draw-chan: " msg-name))          
+          (when (= msg-name :draw)
             (put! out-chan [:draw msg-data])
-            (<! (get-drawing input-chan out-chan)))
+            (<! (get-drawing input-chan out-chan))
+            )
           (recur (<! input-chan))))
     out-chan))
 
@@ -85,5 +87,4 @@
                           (get [:red :green :blue] (mod color-i 3)))))
        (recur (<! drawing-chan) (inc color-i))))))
 
-(defn example-1 [selector]
-  (drawing-loop selector))
+

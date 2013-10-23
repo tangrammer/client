@@ -2,7 +2,7 @@
   (:require
    [cljs.core.async :as async
     :refer [<! >! chan close! sliding-buffer put! alts! timeout]]
-   [jayq.core :refer [$ append ajax inner css $deferred
+   [jayq.core :refer [$ append ajax inner css $deferred empty
                       when done resolve pipe on bind attr
                       offset] :as jq]
    [jayq.util :refer [log]]
@@ -39,4 +39,4 @@
   (render-state selector
                 (map-indexed create-dot (get-rand-colors board-size))))
 
-(def example-2 render-example-board)
+

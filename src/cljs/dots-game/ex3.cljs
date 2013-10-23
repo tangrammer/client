@@ -11,6 +11,14 @@
    [dots-game.ex2 :refer [render-example-board grid-unit board-size] :as board])
   (:require-macros [cljs.core.async.macros :as m :refer [go]]))
 
+(defn -log [m]
+;  (.log js/console m)
+  )
+
+
+
+
+
 (def reverse-board-position (partial - (dec board-size)))
 
 (defn coord->dot-pos [offset {:keys [x y]}]
@@ -19,34 +27,76 @@
                (< 12 y (* board-size grid-unit)))
       (reverse-board-position (int (/ y grid-unit))))))
 
-(defn collect-dots [draw-input out-chan board-offset init-msg]
+(defn collect-dots [draw-channel out-chan board-offset init-msg]
   (go
    (loop [last-pos nil
           msg init-msg]
      (when (= :draw (first msg))
        (let [cur-pos (coord->dot-pos board-offset (last msg))]
          (if (and (not (nil? cur-pos)) (not= cur-pos last-pos))
-           (put! out-chan [:dot-pos cur-pos]))
-         (recur (or cur-pos last-pos) (<! draw-input)))))))
+           (do
+             (-log [:dot-pos cur-pos])
+             (put! out-chan [:dot-pos cur-pos])))
+         (recur (or cur-pos last-pos) (<! draw-channel)))))))
+
+
+(defn check-dot-channel [draw-channel board-offset]
+(let [ out-chan (chan)]
+    
+    (go
+    (loop [msg (<! draw-channel)]
+      (when (= (first msg) :draw)
+        (<! (collect-dots draw-channel out-chan board-offset msg))
+        (-log msg)
+        (put! out-chan [:end-dots]))
+      (recur (<! draw-channel))))
+    out-chan
+    )
+
+  
+  
+  )
+
+
+
+
 
 (defn dot-chan [selector]
-  (let [draw-input (draw-chan selector)
+  (let [
         board-offset ((juxt :left :top) (offset ($ selector)))
-        out-chan (chan)
-        dot-collector (partial collect-dots draw-input out-chan board-offset)]
-    (go
-     (loop [msg (<! draw-input)]
-       (when (= (first msg) :draw)
-         (<! (dot-collector msg))
-         (put! out-chan [:end-dots]))
-       (recur (<! draw-input))))
-    out-chan))
+        res (-> selector (draw-chan) (check-dot-channel  board-offset))
+        ]
+    (-log res)
+    res
+
+    ))
+
+
+(defn log-process [selector the-chan]
+  (-log "eyyyyyy")
+  (go
+   (loop [the-value (<! the-chan)]
+     (-log "the-value")
+     (.prepend ($ (str selector "-log"))
+              (crate/html [:div (prn-str the-value)]))
+     (recur (<! the-chan))
+     ))
+
+)
+
 
 (defn log-loop [selector]
-  (let [dot-ch (dot-chan selector)]
+  (let [check-dot-channel (dot-chan selector)]
+    (log-process selector check-dot-channel)
     (render-example-board selector)
-    (go
-     (loop []
-       (.prepend ($ (str selector "-log"))
-               (crate/html [:div (prn-str (<! dot-ch))]))
-       (recur)))))
+
+    ))
+
+
+(defn m-log []
+                                        ;(.greet (js/Person. "Juan"))
+  (let [Person (.-Person js/f) 
+        juan (Person. "Juan")
+        ]
+    (.log js/console  (.greet juan)))
+  )

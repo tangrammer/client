@@ -1,8 +1,12 @@
 <html>
   <head>
     <script src="externs/jquery.min.js" type="text/javascript"></script>
+
+    <script src="externs/test.js" type="text/javascript"></script> 
+
     <script type="text/javascript" src="example-bis.js"></script>
 <link rel="stylesheet" href="css/dots2.css">
+<link rel="stylesheet" href="css/anim2.css">
   </head>
 <style>
 .point.blue {  
@@ -40,11 +44,95 @@ background-color: rgb(227, 73, 50);
 }
 
 </style>
+<style>
+.boardy .dot {
+   position: absolute;
+   width: 22px;
+   height: 22px;
+   visibility: visible;
+}
+
+.blue {
+   background: transparent url(/images/geo_sprite.png) no-repeat -48px -1px;
+}
+
+.green {
+   background: transparent url(/images/geo_sprite.png) no-repeat -24px -1px;
+}
+
+.purple {
+   background: transparent url(/images/geo_sprite.png) no-repeat -96px -1px;
+}
+
+.yellow {
+   background: transparent url(/images/geo_sprite.png) no-repeat 0px -1px;
+}
+
+.red {
+   background: transparent url(/images/geo_sprite.png) no-repeat -72px -1px;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+.blue {
+   background: transparent url(/images/geo_sprite@2x.png) no-repeat -48px -1px;
+   background-size: 118px;
+}
+
+.green {
+   background: transparent url(/images/geo_sprite@2x.png) no-repeat -24px -1px;
+   background-size: 118px;
+}
+
+.purple {
+   background: transparent url(/images/geo_sprite@2x.png) no-repeat -96px -1px;
+   background-size: 118px;
+}
+
+.yellow {
+   background: transparent url(/images/geo_sprite@2x.png) no-repeat 0px -1px;
+   background-size: 118px;
+}
+
+.red {
+   background: transparent url(/images/geo_sprite@2x.png) no-repeat -72px -1px;
+   background-size: 118px;
+}
+}
+
+.boardy { 
+  position: relative; 
+  height: 295px;
+  width: 70px;
+  border: 1px solid #f0f0f0;
+  -webkit-touch-callout: none; 
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: moz-none;
+  -ms-user-select: none; 
+  background-color: #444;
+}
+</style>
+<style>
+.logger {
+  font-size: 10px;
+}
+#example-boardy-log {
+  position: absolute;
+  left: 90px;
+  width: 100px;
+  height: 295px;
+  overflow: auto;
+}
+</style>
   <body>
 <div id="the-div" style="background-color:yellow;">the-div</div>
-<div id="example-4" style="widht:500; height:500;background-color:gray;" ondragstart="return false;" ondrop="return false;"><br>
+<div id="example-boardy" class="boardy" 
+     ondragstart="return false;" ondrop="return false;">
+<div class="logger" id="example-boardy-log"></div>
+</div>
+<div id="example-4"  style="widht:500; height:500;background-color:gray;" ondragstart="return false;" ondrop="return false;"><br>
 </div>
 
-<script>;goog.require('clojure.browser.repl');clojure.browser.repl.connect.call(null, 'http://localhost:50810/1317/repl');</script>
+<script>;goog.require('clojure.browser.repl');clojure.browser.repl.connect.call(null, 'http://localhost:58173/6130/repl');</script>
   </body>
 </html>
